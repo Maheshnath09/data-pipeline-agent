@@ -30,16 +30,21 @@ warnings.filterwarnings('ignore')
 
 # --- Load environment vars ---
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # ======================================================
 # 🧠 Groq LLM Call (GPT-OSS 120B)
 # ======================================================
 def call_gpt_oss_120b(prompt: str) -> str:
     """Call Groq GPT-OSS 120B for reasoning or explanations"""
+    # Get API key dynamically (for HF Spaces compatibility)
+    api_key = os.environ.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
+    
+    if not api_key:
+        return "⚠️ AI insights unavailable: GROQ_API_KEY not configured. Add it in Space Settings → Secrets."
+    
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
     payload = {
