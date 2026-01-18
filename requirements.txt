@@ -10,7 +10,8 @@ matplotlib>=3.7.0
 seaborn>=0.13.0
 
 # Web framework
-gradio==4.36.0
+gradio==4.19.2
+gradio_client==0.10.1
 huggingface_hub>=0.20.0,<0.24.0
 
 # Utilities
