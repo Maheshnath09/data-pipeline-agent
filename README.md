@@ -1,3 +1,16 @@
+---
+title: Data Pipeline Agent
+emoji: 🧠
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: "5.0.0"
+python_version: "3.12"
+app_file: app.py
+pinned: false
+license: mit
+---
+
 # 🧠 Data Pipeline Agent
 
 An AI-powered data processing pipeline that automatically cleans, visualizes, and trains machine learning models on your datasets with intelligent insights powered by Groq's GPT-OSS 120B model.
