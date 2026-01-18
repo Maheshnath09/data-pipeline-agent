@@ -61,9 +61,17 @@ def call_gpt_oss_120b(prompt: str) -> str:
         r = requests.post(url, headers=headers, json=payload, timeout=60)
         r.raise_for_status()
         data = r.json()
-        return data["choices"][0]["message"]["content"]
+        # Safely access nested data to avoid index errors
+        choices = data.get("choices", [])
+        if choices and len(choices) > 0:
+            message = choices[0].get("message", {})
+            return message.get("content", "No content in response")
+        else:
+            return f"⚠️ LLM returned empty response. Raw: {str(data)[:200]}"
+    except requests.exceptions.HTTPError as e:
+        return f"⚠️ LLM API error ({r.status_code}): {str(e)[:100]}"
     except Exception as e:
-        return f"LLM call failed: {e}"
+        return f"⚠️ LLM call failed: {str(e)[:100]}"
 
 # ======================================================
 # 🧹 Data Cleaning and Preprocessing
