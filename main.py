@@ -232,6 +232,14 @@ def train_model(df, target_col, progress=None):
 
     if X.shape[1] == 0:
         raise ValueError("No numeric columns found for training.")
+    
+    # Minimum sample check - need at least 10 rows for meaningful ML training
+    MIN_SAMPLES = 10
+    if len(X) < MIN_SAMPLES:
+        raise ValueError(
+            f"Dataset too small for ML training. Need at least {MIN_SAMPLES} samples, "
+            f"but got {len(X)}. Please upload a larger dataset."
+        )
 
     # Determine if this is a classification or regression task
     is_classification = False
