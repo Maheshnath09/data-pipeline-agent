@@ -245,13 +245,29 @@ def train_model(df, target_col, progress=None):
     # Check for class imbalance
     is_imbalanced = False
     if is_classification:
-        class_counts = np.bincount(y)
-        min_class = np.min(class_counts)
-        max_class = np.max(class_counts)
-        is_imbalanced = min_class / max_class < 0.2  # If minority class is less than 20% of majority
+        try:
+            # Ensure y is integer type for bincount
+            y_int = y.astype(int) if hasattr(y, 'astype') else np.array(y, dtype=int)
+            class_counts = np.bincount(y_int)
+            if len(class_counts) >= 2:
+                min_class = np.min(class_counts[class_counts > 0])
+                max_class = np.max(class_counts)
+                is_imbalanced = min_class / max_class < 0.2  # If minority class is less than 20% of majority
+        except Exception:
+            # If bincount fails, just skip imbalance handling
+            is_imbalanced = False
     
-    # Split the data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y if is_classification else None)
+    # Split the data with fallback for stratify failures
+    try:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42, 
+            stratify=y if is_classification else None
+        )
+    except ValueError:
+        # Fallback without stratify if it fails (e.g., too few samples per class)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42
+        )
     
     # Apply scaling
     scaler = StandardScaler()
