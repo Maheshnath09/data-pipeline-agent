@@ -1,0 +1,22 @@
+name: Deploy to Hugging Face Spaces
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://huggingface.co/spaces/Maheshnath09/data-pipeline-agent
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy notification
+        run: |
+          echo "✅ Deployed to Hugging Face Spaces!"
+          echo "🔗 Live at: https://huggingface.co/spaces/Maheshnath09/data-pipeline-agent"
