@@ -284,10 +284,6 @@ def train_model(df, target_col, progress=None):
     
     # Handle class imbalance if needed
     if is_imbalanced and is_classification:
-        # Calculate class weights
-        class_weights = compute_class_weight('balanced', classes=np.unique(y_train), y=y_train)
-        class_weight_dict = {i: weight for i, weight in enumerate(class_weights)}
-        
         # Apply SMOTE for oversampling
         try:
             smote = SMOTE(random_state=42)
@@ -297,18 +293,20 @@ def train_model(df, target_col, progress=None):
             X_train_resampled, y_train_resampled = X_train_scaled, y_train
     else:
         X_train_resampled, y_train_resampled = X_train_scaled, y_train
-        class_weight_dict = None
     
     # Model selection and hyperparameter tuning
     if progress is not None:
         progress(0.5, desc="Training and tuning models...")
     
     if is_classification:
+        # Use 'balanced' class_weight which sklearn handles automatically
+        class_weight_setting = 'balanced' if is_imbalanced else None
+        
         # Try multiple classification models
         models = {
-            'RandomForest': RandomForestClassifier(random_state=42, class_weight=class_weight_dict),
+            'RandomForest': RandomForestClassifier(random_state=42, class_weight=class_weight_setting),
             'GradientBoosting': GradientBoostingClassifier(random_state=42),
-            'LogisticRegression': LogisticRegression(random_state=42, class_weight=class_weight_dict, max_iter=1000)
+            'LogisticRegression': LogisticRegression(random_state=42, class_weight=class_weight_setting, max_iter=1000)
         }
         
         # Hyperparameter grids
