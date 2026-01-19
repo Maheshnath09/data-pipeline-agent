@@ -300,7 +300,7 @@ def train_model(df, target_col, progress=None):
         class_weight_dict = None
     
     # Model selection and hyperparameter tuning
-    if progress:
+    if progress is not None:
         progress(0.5, desc="Training and tuning models...")
     
     if is_classification:
