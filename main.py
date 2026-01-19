@@ -518,7 +518,10 @@ def run_pipeline(file_obj, target_col, progress=gr.Progress()):
 
         return html, model_path
     except Exception as e:
-        error_html = f"<h2>Error in Pipeline</h2><p>{str(e)}</p>"
+        import traceback
+        tb = traceback.format_exc()
+        print(f"Pipeline Error Traceback:\n{tb}")  # Log to console for HF Spaces logs
+        error_html = f"<h2>Error in Pipeline</h2><p>{str(e)}</p><details><summary>Full Traceback</summary><pre>{tb}</pre></details>"
         return error_html, None
 
 # ======================================================
