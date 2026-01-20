@@ -59,3 +59,7 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# ChromaDB
+chroma_db/
+test_chroma_db/

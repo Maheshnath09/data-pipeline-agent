@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Import the pipeline functions and Gradio app creator
-from main import create_gradio_app
+# Import the multi-agent pipeline app
+from app_v2 import create_multi_agent_app
 
 # Create the Gradio app
-app = create_gradio_app()
+app = create_multi_agent_app()
 
 # For Hugging Face Spaces deployment
 if __name__ == "__main__":
