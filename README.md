@@ -1,316 +1,287 @@
----
-title: Data Pipeline Agent
-emoji: 🧠
-colorFrom: blue
-colorTo: purple
-sdk: gradio
-sdk_version: "4.19.2"
-python_version: "3.12"
-app_file: app.py
-pinned: false
-license: mit
+# 🧠 Multi-Agent Data Pipeline Builder
+
+[![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Maheshnath09/data-pipeline-agent)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+An intelligent **multi-agent AI system** that automates the entire data science pipeline—from data cleaning to model training to insight generation. Powered by **5 specialized AI agents** and enhanced with **Retrieval-Augmented Generation (RAG)** for context-aware recommendations.
+
 ---
 
-# 🧠 Data Pipeline Agent
+## 🌐 Live Demo
 
-An AI-powered data processing pipeline that automatically cleans, visualizes, and trains machine learning models on your datasets with intelligent insights powered by Groq's GPT-OSS 120B model.
+**Try it now:** [🔗 data-pipeline-agent.hf.space](https://maheshnath09-data-pipeline-agent.hf.space)
+
+---
 
 ## ✨ Features
 
-- **🧹 Intelligent Data Cleaning**: Automatic handling of missing values, outliers, and categorical encoding
-- **📊 Comprehensive Visualizations**: Auto-generated charts including correlation matrices, distributions, and target analysis
-- **🤖 Smart Model Training**: Automatic model selection between classification/regression with hyperparameter tuning
-- **🧠 AI-Powered Insights**: LLM-generated explanations and recommendations using Groq GPT-OSS 120B
-- **⚖️ Class Imbalance Handling**: SMOTE oversampling and class weighting for imbalanced datasets
-- **📱 Progressive Web App**: PWA support with offline capabilities
-- **🚀 FastAPI Backend**: RESTful API with async processing and background tasks
-- **🎨 Modern Web UI**: Clean, responsive interface with real-time progress tracking
+| Feature | Description |
+|---------|-------------|
+| **� 5 AI Agents** | Specialized agents for different pipeline stages |
+| **📚 RAG Integration** | ChromaDB-powered knowledge retrieval for best practices |
+| **📊 Auto Visualization** | Intelligent chart generation based on data types |
+| **🎯 Model Selection** | Automatic model comparison and selection |
+| **� AI Insights** | LLM-powered recommendations and analysis |
+| **📈 Progress Tracking** | Real-time progress updates during processing |
 
-## 🏗️ Architecture
+---
 
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TB
+    subgraph Input["📁 Input"]
+        CSV[CSV/Excel File]
+        Target[Target Column]
+    end
+
+    subgraph Orchestrator["🎯 Orchestrator Agent"]
+        direction TB
+        O[Coordinates Pipeline<br/>Manages State<br/>Generates Report]
+    end
+
+    subgraph Agents["🤖 Specialized Agents"]
+        direction TB
+        DA["📊 Data Analyst<br/>• Data cleaning<br/>• Missing value handling<br/>• Feature detection"]
+        ML["🔧 ML Engineer<br/>• Model selection<br/>• Cross-validation<br/>• Hyperparameter tuning"]
+        VIZ["📈 Visualization<br/>• Auto chart selection<br/>• Distribution plots<br/>• Correlation heatmaps"]
+        INS["💡 Insight Agent<br/>• RAG-powered analysis<br/>• Recommendations<br/>• Next steps"]
+    end
+
+    subgraph RAG["📚 RAG System"]
+        direction TB
+        KB[(Knowledge Base)]
+        VDB[(ChromaDB<br/>Vector Store)]
+        EMB[Sentence<br/>Transformers]
+    end
+
+    subgraph Output["📋 Output"]
+        Report[HTML Report]
+        Model[Trained Model .pkl]
+        Charts[Visualizations]
+    end
+
+    CSV --> O
+    Target --> O
+    O --> DA
+    DA --> ML
+    ML --> VIZ
+    VIZ --> INS
+    
+    KB --> EMB --> VDB
+    VDB -.-> DA
+    VDB -.-> ML
+    VDB -.-> INS
+    
+    INS --> Report
+    ML --> Model
+    VIZ --> Charts
 ```
-data_pipeline_agent/
-├── api.py              # FastAPI backend with REST endpoints
-├── main.py             # Core ML pipeline and Gradio interface
-├── models/             # Saved trained models and artifacts
-├── static/             # Static assets (favicon, icons)
-├── templates/          # HTML templates (if any)
-├── Dockerfile          # Container configuration
-├── pyproject.toml      # Python dependencies
-├── manifest.json       # PWA manifest
-├── sw.js              # Service worker for PWA
-└── .env               # Environment variables
-```
+
+---
+
+## 🤖 Agent Details
+
+### 1. 🎯 Orchestrator Agent
+The central coordinator that manages the entire pipeline:
+- Routes tasks to specialized agents
+- Maintains shared state between agents
+- Tracks progress for UI updates
+- Compiles the final HTML report
+
+### 2. 📊 Data Analyst Agent
+Handles data understanding and preprocessing:
+- Detects data types (numeric, categorical, datetime)
+- Handles missing values intelligently
+- Removes duplicates
+- Extracts datetime features
+- Uses RAG for cleaning best practices
+
+### 3. 🔧 ML Engineer Agent
+Manages model training and evaluation:
+- Automatic task detection (classification vs regression)
+- Compares multiple models (RandomForest, GradientBoosting, LogisticRegression)
+- 3-fold cross-validation
+- Handles class imbalance
+- Saves trained model as `.pkl`
+
+### 4. 📈 Visualization Agent
+Creates intelligent, context-aware visualizations:
+- Dataset overview summary
+- Target distribution plots
+- Correlation heatmaps
+- Feature distribution histograms
+- Auto-selects appropriate chart types
+
+### 5. 💡 Insight Agent
+Generates AI-powered insights using RAG:
+- Queries knowledge base for best practices
+- Summarizes key findings
+- Provides actionable recommendations
+- Suggests next steps for improvement
+
+---
+
+## 📚 RAG System
+
+The **Retrieval-Augmented Generation** system enhances agent responses with domain knowledge:
+
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| Vector Store | ChromaDB | Stores and retrieves document embeddings |
+| Embeddings | sentence-transformers (all-MiniLM-L6-v2) | Converts text to vector representations |
+| Knowledge Base | Markdown documents | ML best practices, visualization guides, data analysis tips |
+
+### Knowledge Base Contents:
+- **ML Best Practices** - Model selection, feature engineering, handling imbalance
+- **Visualization Guide** - Chart selection, design principles, common mistakes
+- **Data Analysis Guide** - Quality assessment, column analysis, feature-target relationships
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-- Python 3.12+
-- Groq API key (for AI insights)
+- Python 3.10+
+- pip or uv package manager
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd data_pipeline_agent
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/Maheshnath09/data-pipeline-agent.git
+cd data-pipeline-agent
 
-2. **Install dependencies using uv (recommended)**
-   ```bash
-   pip install uv
-   uv sync
-   ```
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-   Or using pip:
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Install dependencies
+pip install -r requirements.txt
 
-3. **Set up environment variables**
-   ```bash
-   # Create .env file
-   echo "GROQ_API_KEY=your_groq_api_key_here" > .env
-   ```
+# Set up environment variables
+echo "GROQ_API_KEY=your_groq_api_key" > .env
+```
 
-4. **Run the application**
-   ```bash
-   # FastAPI backend (recommended for production)
-   uvicorn api:app --host 0.0.0.0 --port 8000 --reload
-   
-   # Or Gradio standalone
-   python main.py
-   ```
-
-5. **Access the application**
-   - FastAPI + Custom UI: http://localhost:8000
-   - Gradio Interface: http://localhost:8000/gradio
-   - API Documentation: http://localhost:8000/docs
-
-## 🐳 Docker Deployment
+### Run Locally
 
 ```bash
-# Build the image
-docker build -t data-pipeline-agent .
-
-# Run the container
-docker run -p 8000:8000 --env-file .env data-pipeline-agent
+python app.py
 ```
 
-## 📡 API Endpoints
-
-### Core Pipeline Endpoints
-
-- `POST /upload` - Upload dataset file
-- `POST /run_pipeline/{file_id}` - Start pipeline processing
-- `GET /status/{file_id}` - Check processing status
-- `GET /report/{file_id}` - Get HTML report
-- `GET /download/{file_id}` - Download trained model
-
-### Static & PWA Endpoints
-
-- `GET /static/*` - Static file serving
-- `GET /favicon.ico` - Favicon
-- `GET /manifest.json` - PWA manifest
-- `GET /sw.js` - Service worker
-
-## 🔧 Usage
-
-### 1. Web Interface
-
-1. Navigate to http://localhost:8000
-2. Upload your CSV/Excel dataset
-3. Specify the target column name
-4. Click "Run Pipeline"
-5. Monitor progress and view results
-6. Download the trained model
-
-### 2. API Usage
-
-```python
-import requests
-
-# Upload file
-with open('dataset.csv', 'rb') as f:
-    response = requests.post('http://localhost:8000/upload', files={'file': f})
-    file_id = response.json()['file_id']
-
-# Run pipeline
-response = requests.post(f'http://localhost:8000/run_pipeline/{file_id}', 
-                        params={'target_column': 'price'})
-
-# Check status
-status = requests.get(f'http://localhost:8000/status/{file_id}').json()
-
-# Get report when completed
-if status['status'] == 'completed':
-    report = requests.get(f'http://localhost:8000/report/{file_id}').text
-```
-
-## 🧠 AI Features
-
-### Intelligent Data Processing
-
-- **Missing Value Handling**: Median for numeric, mode for categorical
-- **Categorical Encoding**: Frequency encoding for high cardinality, label encoding for low
-- **DateTime Feature Engineering**: Automatic extraction of time-based features
-- **Outlier Detection**: IQR-based clipping for numeric columns
-
-### Smart Model Selection
-
-**Classification Tasks:**
-- Random Forest Classifier
-- Gradient Boosting Classifier  
-- Logistic Regression
-
-**Regression Tasks:**
-- Random Forest Regressor
-- Gradient Boosting Regressor
-- Linear Regression
-
-### Advanced Features
-
-- **Hyperparameter Tuning**: GridSearchCV with cross-validation
-- **Class Imbalance**: SMOTE oversampling + class weighting
-- **Feature Importance**: Automatic extraction and ranking
-- **Model Persistence**: Joblib serialization with scalers
-
-## 📊 Supported Data Formats
-
-- **CSV files** (`.csv`)
-- **Excel files** (`.xlsx`, `.xls`)
-- **Automatic encoding detection**
-- **Mixed data types support**
-
-## 🔍 Generated Insights
-
-The pipeline automatically generates:
-
-1. **Data Overview**: Shape, types, missing values
-2. **Target Distribution**: Histograms and count plots
-3. **Correlation Analysis**: Feature correlation heatmaps
-4. **Feature Distributions**: Individual feature analysis
-5. **Model Performance**: Comprehensive metrics
-6. **Feature Importance**: Top contributing features
-7. **AI Explanations**: LLM-powered insights and recommendations
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-```bash
-GROQ_API_KEY=your_groq_api_key_here  # Required for AI insights
-```
-
-### Model Parameters
-
-Models are automatically tuned with these parameter grids:
-
-```python
-# Random Forest
-{'n_estimators': [50, 100], 'max_depth': [None, 10, 20]}
-
-# Gradient Boosting  
-{'n_estimators': [50, 100], 'learning_rate': [0.01, 0.1]}
-
-# Logistic Regression
-{'C': [0.1, 1.0, 10.0]}
-```
-
-## 📈 Performance Metrics
-
-### Classification
-- Accuracy, Precision, Recall, F1-Score
-- Confusion Matrix
-- Class imbalance detection
-
-### Regression  
-- Mean Squared Error (MSE)
-- Mean Absolute Error (MAE)
-- R² Score
-
-## 🛠️ Development
-
-### Project Structure
-
-```python
-# Core modules
-main.py          # ML pipeline logic
-api.py           # FastAPI backend
-models/          # Saved models directory
-
-# Dependencies
-pyproject.toml   # Python dependencies (uv format)
-requirements.txt # Pip format (if needed)
-
-# Deployment
-Dockerfile       # Multi-stage container build
-.env            # Environment configuration
-```
-
-### Adding New Models
-
-```python
-# In train_model() function
-models = {
-    'YourModel': YourModelClass(params),
-    # Add hyperparameter grid
-}
-
-param_grids = {
-    'YourModel': {'param1': [val1, val2], 'param2': [val3, val4]}
-}
-```
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-1. **Groq API Key Missing**
-   ```
-   Error: LLM call failed
-   Solution: Set GROQ_API_KEY in .env file
-   ```
-
-2. **Target Column Not Found**
-   ```
-   Error: Target column 'xyz' not found
-   Solution: Check column names, case-sensitive matching
-   ```
-
-3. **No Numeric Features**
-   ```
-   Error: No numeric columns found for training
-   Solution: Ensure dataset has numeric features
-   ```
-
-### Performance Tips
-
-- **Large Datasets**: Consider sampling for faster processing
-- **High Cardinality**: Categorical features are automatically handled
-- **Memory Usage**: Models and scalers are saved to disk
-- **Concurrent Processing**: FastAPI handles multiple requests
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📞 Support
-
-For support and questions:
-- Create an issue on GitHub
-- Check the API documentation at `/docs`
-- Review the troubleshooting section above
+Open http://127.0.0.1:7860 in your browser.
 
 ---
 
-**Built with ❤️ using FastAPI, Scikit-learn, and Groq AI**
+## 📦 Project Structure
+
+```
+data-pipeline-agent/
+├── agents/                    # Multi-agent system
+│   ├── __init__.py
+│   ├── base_agent.py         # Base agent class with LLM integration
+│   ├── orchestrator.py       # Pipeline coordinator
+│   ├── data_analyst.py       # Data cleaning agent
+│   ├── ml_engineer.py        # Model training agent
+│   ├── visualization.py      # Chart generation agent
+│   └── insight.py            # AI insights agent
+├── rag/                       # RAG system
+│   ├── __init__.py
+│   ├── vector_store.py       # ChromaDB wrapper
+│   ├── retriever.py          # RAG retriever
+│   ├── indexer.py            # Knowledge base indexer
+│   └── knowledge_base/       # Source documents
+│       ├── ml_best_practices.md
+│       ├── visualization_guide.md
+│       └── data_analysis_guide.md
+├── app.py                     # Main entry point (HF Spaces)
+├── app_v2.py                  # Multi-agent Gradio app
+├── multi_agent_pipeline.py    # Pipeline orchestration
+├── main.py                    # Original single-agent pipeline
+├── requirements.txt           # Dependencies
+└── README.md
+```
+
+---
+
+## � Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `GROQ_API_KEY` | API key for Groq LLM | Yes (for AI insights) |
+
+### Supported Models
+
+The ML Engineer agent automatically selects from:
+
+**Classification:**
+- RandomForestClassifier
+- GradientBoostingClassifier
+- LogisticRegression
+
+**Regression:**
+- RandomForestRegressor
+- GradientBoostingRegressor
+- Ridge
+
+---
+
+## 📊 Sample Output
+
+When you run the pipeline, you get:
+
+1. **Data Analysis Report** - Cleaning summary, shape changes
+2. **Model Performance** - Accuracy, Precision, Recall, F1-Score
+3. **Visualizations** - Distribution plots, correlation heatmaps
+4. **AI Insights** - Key findings, recommendations, next steps
+5. **Downloadable Model** - Trained `.pkl` file
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technologies |
+|----------|--------------|
+| **Frontend** | Gradio |
+| **Backend** | Python, FastAPI |
+| **ML** | Scikit-learn, Pandas, NumPy |
+| **LLM** | Groq (GPT-OSS 120B) |
+| **RAG** | ChromaDB, Sentence-Transformers |
+| **Visualization** | Matplotlib, Seaborn |
+| **Deployment** | Hugging Face Spaces |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## � License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**Mahesh Nath**
+
+- GitHub: [@Maheshnath09](https://github.com/Maheshnath09)
+- Hugging Face: [@Maheshnath09](https://huggingface.co/Maheshnath09)
+
+---
+
+<p align="center">
+  Made with ❤️ and AI
+</p>
