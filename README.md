@@ -1,3 +1,15 @@
+---
+title: Data Pipeline Agent
+emoji: 🧠
+colorFrom: indigo
+colorTo: blue
+sdk: gradio
+sdk_version: "4.19.2"
+python_version: "3.10"
+app_file: app.py
+pinned: false
+---
+
 # 🧠 Multi-Agent Data Pipeline Builder
 
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Maheshnath09/data-pipeline-agent)
